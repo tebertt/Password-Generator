@@ -8,21 +8,29 @@
 
 static uint8_t password_length = 16;
 
-static uint8_t verbose_flag = 0;
+static uint8_t verbose_flag   = 0;
+static uint8_t time_flag      = 0;
 static uint8_t lowercase_flag = 1;
 static uint8_t uppercase_flag = 1;
-static uint8_t numbers_flag = 1;
-static uint8_t symbols_flag = 1;
-static uint8_t similar_flag = 0;
+static uint8_t numbers_flag   = 1;
+static uint8_t symbols_flag   = 1;
+static uint8_t similar_flag   = 0;
 
 static struct option long_options[] = {
     {"verbose", no_argument, 0, 'v'},
     {"help",    no_argument, 0, 'h'},
     {"Version", no_argument, 0, 'V'},
 
-    {"length", optional_argument, 0, 'l'},
+    {"time",    no_argument, 0, 't'},
+    {"number",  no_argument, 0, 'n'},
+    {"lower",   no_argument, 0, 'l'},
+    {"upper",   no_argument, 0, 'u'},
+    {"symbol",  no_argument, 0, 's'},
+    {"similar", no_argument, 0, 'x'},
 
-    {0, 0, 0, 0 }
+    {"Length", optional_argument, 0, 'L'},
+
+    {0, 0, 0, 0}
 };
 
 uint8_t get_verbose() {
@@ -37,6 +45,14 @@ void verbose(char* arg) {
     if(verbose_flag) {
         printf("%s\n", arg);
     }
+}
+
+uint8_t get_time() {
+    return time_flag;
+}
+
+void set_time(uint8_t time) {
+    time_flag = time;
 }
 
 uint8_t get_length() {
@@ -106,7 +122,7 @@ void handle_flags(int32_t argc, char** argv) {
     int16_t opt = 0;
     int32_t option_index = 0;
 
-    while((opt = getopt_long(argc, argv, ":vhl:V", long_options, &option_index)) != -1) {
+    while((opt = getopt_long(argc, argv, ":vhtnlusxL:V", long_options, &option_index)) != -1) {
         switch(opt) {
             case 'v':
                 set_verbose(1);
@@ -118,9 +134,26 @@ void handle_flags(int32_t argc, char** argv) {
             case 'V':
                 printf("Version: %s\n", VERSION);
                 break;
+            case 't':
+                printf("Time base pseudorandom\n");
+                break;
+            case 'n':
+                set_numbers(0);
+                break;
             case 'l':
+                set_lowercase(0);
+                break;
+            case 'u':
+                set_uppercase(0);
+                break;
+            case 's':
+                set_symbols(0);
+                break;
+            case 'x':
+                set_similar(1);
+                break;
+            case 'L':
                 parse_length(optarg);
-                //printf("Length is now %d\n", get_length());
                 break;
             case ':':
                 warnx("-%c flag needs an argument", optopt);

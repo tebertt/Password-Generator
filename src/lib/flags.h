@@ -20,6 +20,10 @@ void set_verbose(uint8_t verbose);
 
 void verbose(char* arg);
 
+uint8_t get_time();
+
+void set_time(uint8_t time);
+
 uint8_t get_length();
 
 void set_length(uint8_t length);
