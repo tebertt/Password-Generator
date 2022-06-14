@@ -111,7 +111,6 @@ int main(int argc, char** argv) {
     }
     
     printf("Password: %s\n", password);
-
     free(password);
 
     return(EXIT_SUCCESS);
